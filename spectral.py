@@ -116,10 +116,10 @@ class spectral():
     def norm_sym_sc(self, k):
         if self.graph == False: print("Construct a similarity graph first!")
         else:
-            self.L = self.D - self.W #compute the unnormalized Laplacian
-            #TODO: check and fix line 121
-            self.L = np.dot(np.dot(self.D**(-1/2), self.L), self.D**(-1/2))  #compute the normalized sym Laplacian
-            print(self.L.shape)
+            D_sqrt = np.copy(self.D)
+            m = self.D.shape[0]
+            D_sqrt[np.diag_indices(m)] = np.diag(self.D)**(-1/2)
+            self.L = np.identity(m) - np.dot(np.dot(D_sqrt, self.W), D_sqrt) #compute the unnormalized Laplacian
 #            if self.graph == "fully connected graph":
             self.w, self.U = eigh(self.L, eigvals=(0,k-1)) #compute the eigenvalues and eigenvectors
 #            else:
@@ -127,7 +127,7 @@ class spectral():
             self.T = normalize(self.U) #normalize samples to norm 1
             kmeans = KMeans(k)
             self.pred = kmeans.fit_predict(self.T)
-        self.clustering = "normalized (rw) Laplacian"
+        self.clustering = "normalized (sym) Laplacian"
     
     """Visualisation of the clusters constructed. PCA to 2 dimensions"""    
     def show_clust(self):

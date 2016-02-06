@@ -36,13 +36,13 @@ def gauss_s(x1, x2, d):
 
 #create a clustering object
 c = spectral.spectral(X, Y, gauss_s, dist.euclidean)
-c.kNN_graph(20, "euclidean", True)
+c.kNN_graph(30, "euclidean", True)
 #c.kNN_graph(10, "euclidean", False)
 #c.eps_graph(0.4)
 #c.full_graph()
-c.show_sim_g()
-c.norm_rw_sc(3)
-#c.norm_sym_sc(3)
+#c.show_sim_g()
+#c.norm_rw_sc(3)
+c.norm_sym_sc(3)
 c.show_clust()
 c.show_correct_class()
 
@@ -51,5 +51,3 @@ c.show_correct_class()
 #sklearn_pred = clusterer.fit_predict(c.W)
 #print(sklearn_pred) #it indeed works
 
-#kmeans = KMeans(3)
-#pred = kmeans.fit_predict(X)
