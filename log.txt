@@ -1,0 +1,764 @@
+******************
+before 10.2.2016 *
+*******************************************************************************************************************************
+Implemented the techniques presented in the article "A Tutorial on Spectral Clustering (Ulrike von Luxburg)".
+They are located in the module "spectral.py" and contain methods for constructing different simmilarity graphs: 
+	-epsilon-graph 
+	-k-NN graph, 
+	-mutual k-NN graph and 
+	-fully-connected graph 
+for a distance or simmilarity function of users choice,
+all three spectral clustering algorithms presented in the article:
+	-Unnormalized spectral clustering
+	-Normalized spectral clustering according to Shi and Malik (2000) and
+	-Normalized spectral clustering according to Ng, Jordan, and Weiss (2002)
+a visualisation function (PCA to 2 dimensions and ploting) appropriate for low dimensionality samples
+and a scoring/evaluation function that evaluates the correctnes of the clusters using
+	-Adjusted Rand index and
+	-Adjusted Mutual Information
+
+*******************************************************************************************************************************
+I tested the implementation on the iris dataset ("main_iris_test.py") and got good results.
+
+*using cosine similarity
+*normalized samples to 1 euclidean norm
+***************************************
+	kNN graph, k = 30, mutual:True
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.9222414299226981
+	Adjusted Mutual Information: 0.912390815939
+		kNN graph, k = 20, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.9410449800736683
+		Adjusted Mutual Information: 0.929166563457
+	Espilon-graph, epsilon = 0.99
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.8507972789115646
+	Adjusted Mutual Information: 0.828718339554
+		fully connected graph
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.5388415225610195
+		Adjusted Mutual Information: 0.584596908667
+	kNN graph, k = 30, mutual:True
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.9222414299226981
+	Adjusted Mutual Information: 0.912390815939
+		kNN graph, k = 20, mutual:False
+		normalized (rw) Laplacian
+		Adjusted Rand index: 0.9222414299226981
+		Adjusted Mutual Information: 0.912390815939
+	Espilon-graph, epsilon = 0.99
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.663433743503878
+	Adjusted Mutual Information: 0.727701484141
+		fully connected graph
+		normalized (rw) Laplacian
+		Adjusted Rand index: 0.5388415225610195
+		Adjusted Mutual Information: 0.584596907954
+	kNN graph, k = 30, mutual:True
+	unnormalized Laplacian
+	Adjusted Rand index: 0.5583714437541352
+	Adjusted Mutual Information: 0.573894052842
+		kNN graph, k = 20, mutual:False
+		unnormalized Laplacian
+		Adjusted Rand index: 0.9222414299226981
+		Adjusted Mutual Information: 0.912390815939
+	Espilon-graph, epsilon = 0.99
+	unnormalized Laplacian
+	Adjusted Rand index: 0.5583714437541352
+	Adjusted Mutual Information: 0.573894052842
+		fully connected graph
+		unnormalized Laplacian
+		Adjusted Rand index: 0.5388415225610195
+		Adjusted Mutual Information: 0.584596907954
+
+*using Gaussian similarity
+*unnormalized samples (eps-graph fails miserabely if samples are normalized, while some other graphs perform better)
+********************************************************************************************************************
+	kNN graph, k = 30, mutual:True
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.885665306122449
+	Adjusted Mutual Information: 0.860546465795
+		kNN graph, k = 20, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.8342589385759397
+		Adjusted Mutual Information: 0.820919276442
+	Espilon-graph, epsilon = 0.4
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.717275916833755
+	Adjusted Mutual Information: 0.739730475897
+		fully connected graph
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.7424064303816006
+		Adjusted Mutual Information: 0.746445504916
+	kNN graph, k = 30, mutual:True
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.9221767019765943
+	Adjusted Mutual Information: 0.899662907753
+		kNN graph, k = 20, mutual:False
+		normalized (rw) Laplacian
+		Adjusted Rand index: 0.7874017024726389
+		Adjusted Mutual Information: 0.79563652861
+	Espilon-graph, epsilon = 0.4
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.6356968215158925
+	Adjusted Mutual Information: 0.706665272558
+		fully connected graph
+		normalized (rw) Laplacian
+		Adjusted Rand index: 0.7429751965483791
+		Adjusted Mutual Information: 0.750966150134
+	kNN graph, k = 30, mutual:True
+	unnormalized Laplacian
+	Adjusted Rand index: 0.5583714437541352
+	Adjusted Mutual Information: 0.573894052842
+		kNN graph, k = 20, mutual:False
+		unnormalized Laplacian
+		Adjusted Rand index: 0.7874017024726389
+		Adjusted Mutual Information: 0.795636528434
+	Espilon-graph, epsilon = 0.4
+	unnormalized Laplacian
+	Adjusted Rand index: 0.5609099839129877
+	Adjusted Mutual Information: 0.591045736202
+		fully connected graph
+		unnormalized Laplacian
+		Adjusted Rand index: 0.7429751965483791
+		Adjusted Mutual Information: 0.750966149707
+
+*******************************************************************************************************************************
+Since module "spectral.py" expects samples as numerical vectors for input I had to write a module to preproces the text documents from 
+a corpus into numerical vector representation. Since the first corpus I started with was the 20newsgroups corpus. The module is specific 
+for texts contained in this corpus and is therefore called "newsgroups20.py". It consists of methods get_words, get_M and get_tf_idf_M.
+When working with this module, the methods should be called in this order.
+
+*get_words:
+	The method walks trough all the subdirectories of a given directory. Each subdirectory in a directory represents a category and contains samples
+	from this category.	This method only counts the words in all of the texts. It returns it and also generates a text file of the vocabulary ordered
+	from the most frequent word to the least frequent.
+	
+*get_M:
+	This method generates a term frequency vector representation of the texts and also generates labels for texts. It saves the samples in a matrix M
+	where rows corespond to samples.
+	
+*get_tf_idf_M
+	This method transforms the matrix M to a term frequency - inverse document frequency matrix. It can do this in different ways since there are different
+	definitions of tf-idf. It depends on the users choice. It can also normalize the rows (samples) of the tf-idf matrix if so chosen. The generated matrix
+	is the matrix that can be now passed to the spectral class.
+
+***********		
+10.2.2016 *
+*******************************************************************************************************************************
+I wanted to test the methods I implemented on a text clustering problem. In particular the 20newsgroups dataset. Script "main_nwsgrp.py"
+For starters I took just 100 sample texts from the sci.electronics folder and 100 sample texts from soc.religion.christian folder.
+After running the spectral clustering for different parameters I finally had some succes.
+
+-using all the words in the vocabulary of 200 samples used for the vector representation
+-using a tf-idf (raw tf, classic idf) vector respresentation of the text documents
+-using cosine simmilarity to construct the graphs
+-using L_sym laplacian matrix (sc algorithm according to Ng, Jordan, and Weiss (2002))
+-the similarity graphs that yielded teh best results are:
+	*45 NN graph (non mutual)
+		-Adjusted Rand index: 0.9208012930401136
+		-Adjusted Mutual Information: 0.87679711952
+	*55 NN graph.
+		-Adjusted Rand index: 0.9208012930401136
+		-Adjusted Mutual Information: 0.87679711952
+	*23 mutual NN graph.
+		-Adjusted Rand index: 0.5431347187256458
+		-Adjusted Mutual Information: 0.471396589359
+	*full graph
+		-Adjusted Rand index: 0.4302338386990199
+		-Adjusted Mutual Information: 0.38436493881
+
+***********		
+11.2.2016 *
+*******************************************************************************************************************************
+I tested the algorithm on a bigger dataset from the 20newsgroups corpus.
+I called it "bigger_test_set_cor"
+I took 100 samples from each category. The choosen categories were:
+-comp.sys.ibm.pc.hardware
+-comp.sys.mac.hardware
+-rec.sport.hockey
+-soc.religion.christian
+-talk.politics.guns
+
+The idea was to see if the algorithm is capable of distinguishing between two highly colerated classes
+pc.hardware and mac.hardware. The scores for using:
+
+-all the words in the vocabulary
+-a tf-idf (raw tf, classic idf) vector represenation of the text documents
+-cosine simmilarity to construct the graphs
+
+*The kNN (non mutual) graph
+*L_sym laplacian matrix
+*samples normalized
+	10 NN graph.
+	Adjusted Rand index: 0.19168475730207712
+	Adjusted Mutual Information: 0.317706984134
+	20 NN graph.
+	Adjusted Rand index: 0.23818318579196357
+	Adjusted Mutual Information: 0.319169397624
+	30 NN graph.
+	Adjusted Rand index: 0.3610614649227011
+	Adjusted Mutual Information: 0.429571592832
+	40 NN graph.
+	Adjusted Rand index: 0.49653814259435275
+	Adjusted Mutual Information: 0.594551532128
+	50 NN graph.
+	Adjusted Rand index: 0.5032207118212573
+	Adjusted Mutual Information: 0.606690625073
+	60 NN graph.
+	Adjusted Rand index: 0.5102494966410493
+	Adjusted Mutual Information: 0.61279715514
+	70 NN graph.
+	Adjusted Rand index: 0.5119865877637108
+	Adjusted Mutual Information: 0.609279823091
+	80 NN graph.
+	Adjusted Rand index: 0.517561504760988
+	Adjusted Mutual Information: 0.614968464071
+	90 NN graph.
+	Adjusted Rand index: 0.5284063293190042
+	Adjusted Mutual Information: 0.617129029046
+	100 NN graph.
+	Adjusted Rand index: 0.5273545642867296
+	Adjusted Mutual Information: 0.613385334414
+	120 NN graph.
+	Adjusted Rand index: 0.5297242973072775
+	Adjusted Mutual Information: 0.616538168222
+	140 NN graph.
+	Adjusted Rand index: 0.5406555871633201
+	Adjusted Mutual Information: 0.627531581664
+	160 NN graph.
+	Adjusted Rand index: 0.5437215444853091
+	Adjusted Mutual Information: 0.623896744984
+	180 NN graph.
+	Adjusted Rand index: 0.5415153599374536
+	Adjusted Mutual Information: 0.617721780303
+	200 NN graph.
+	Adjusted Rand index: 0.5365435481887786
+	Adjusted Mutual Information: 0.609075706132
+	220 NN graph.
+	Adjusted Rand index: 0.5376455008897324
+	Adjusted Mutual Information: 0.60941824643
+	240 NN graph.
+	Adjusted Rand index: 0.5509910673431238
+	Adjusted Mutual Information: 0.625583931731
+	260 NN graph.
+	Adjusted Rand index: 0.5429198133797178
+	Adjusted Mutual Information: 0.617950914231
+	280 NN graph.
+	Adjusted Rand index: 0.5444595037350011
+	Adjusted Mutual Information: 0.615966189966
+	300 NN graph.
+	Adjusted Rand index: 0.5456024295759901
+	Adjusted Mutual Information: 0.615200524949
+	320 NN graph.
+	Adjusted Rand index: 0.5460056402481174
+	Adjusted Mutual Information: 0.610365065521
+	340 NN graph.
+	Adjusted Rand index: 0.5711080657918215
+	Adjusted Mutual Information: 0.628109347862
+	360 NN graph.
+	Adjusted Rand index: 0.5450649065985289
+	Adjusted Mutual Information: 0.614008139192
+	380 NN graph.
+	Adjusted Rand index: 0.5601751381719748
+	Adjusted Mutual Information: 0.626635231454
+	
+*the full graph
+	*unnormalized L
+		Adjusted Rand index: 0.31240995450115705
+		Adjusted Mutual Information: 0.360479978516
+	*L_rw
+		Adjusted Rand index: 0.31240995450115705
+		Adjusted Mutual Information: 0.360479978516
+	*L_sym
+		Adjusted Rand index: 0.5486410486388615
+		Adjusted Mutual Information: 0.620836283519
+		
+*the eps graph (unweighted - just ones and zeros)
+*L_sym laplacian matrix
+Performed poorly. The best score was:
+	0.2 epsilon graph.
+	Adjusted Rand index: 0.18666427911956
+	Adjusted Mutual Information: 0.32815209767
+
+-using gauss simmilarity (sigma = 5)
+-normalized samples
+
+kNN graph, k = 170, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.5816789603275119
+Adjusted Mutual Information: 0.621331904386
+	kNN graph, k = 175, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.5900783979165369
+	Adjusted Mutual Information: 0.638810469215
+kNN graph, k = 180, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.579523305250423
+Adjusted Mutual Information: 0.638860154096
+	kNN graph, k = 185, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.5670582766498645
+	Adjusted Mutual Information: 0.62522935079	
+	
+-using gauss simmilarity (sigma = 10)
+-normalized samples
+
+kNN graph, k = 175, mutual:False
+	normalized (sym) Laplacian
+		Adjusted Rand index: 0.5913909360844606
+		Adjusted Mutual Information: 0.637193103216
+	normalized (rw) Laplacian
+		Adjusted Rand index: 0.5595812986643187
+		Adjusted Mutual Information: 0.614120644041
+	unnormalized Laplacian
+		Adjusted Rand index: 0.5595812986643187
+		Adjusted Mutual Information: 0.614120641785
+
+***************************************************	
+The best score for "bigger_test_set_noncor" dataset:
+*normalized samples
+*gauss similarity (sigma = 10)
+	kNN graph, k = 175, mutual:False
+	normalized (sym) Laplacian
+		Adjusted Rand index: 0.5913909360844606
+		Adjusted Mutual Information: 0.637193103216
+***************************************************
+		
+The algorithm had trouble distinguishing the two simmilar categories. But all in all performed quite OK (see best score).
+Gaussian similarity graphs showed better results than cosine.
+	
+**********************************************************************************	
+***********************************************************************************
+Did another test of the algorithm on a bigger dataset from the 20newsgroups corpus.
+I called it "bigger_test_set_noncor".
+I took 100 samples from each category. The choosen categories were not corelated:
+-comp.sys.ibm.pc.hardware
+-rec.sport.hockey
+-sci.med
+-soc.religion.christian
+-talk.politics.guns
+
+Using cosine similarity, samples normalized:
+********************************************	
+	fully connected graph
+	unnormalized Laplacian
+	Adjusted Rand index: 0.26244688558253215
+	Adjusted Mutual Information: 0.302351358331
+		fully connected graph
+		normalized (rw) Laplacian
+		Adjusted Rand index: 0.13235785605522726
+		Adjusted Mutual Information: 0.22322135465
+	fully connected graph
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.5430646368610986
+	Adjusted Mutual Information: 0.602528218989
+
+	kNN graph, k = 50, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.5461893921078662
+	Adjusted Mutual Information: 0.609054535777
+		kNN graph, k = 150, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.5098508580531774
+		Adjusted Mutual Information: 0.589791772825
+	kNN graph, k = 250, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6724925938313034
+	Adjusted Mutual Information: 0.684139352286
+		kNN graph, k = 350, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.5601057041804279
+		Adjusted Mutual Information: 0.604147985791
+	kNN graph, k = 150, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.5098508580531774
+	Adjusted Mutual Information: 0.589791772345
+		kNN graph, k = 170, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.6864653740529051
+		Adjusted Mutual Information: 0.695137400988
+	kNN graph, k = 190, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6858650096655342
+	Adjusted Mutual Information: 0.693393875277
+		kNN graph, k = 210, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.6818404872325866
+		Adjusted Mutual Information: 0.686701080037
+	kNN graph, k = 230, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.685904201526894
+	Adjusted Mutual Information: 0.691460470612
+		kNN graph, k = 250, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.6724925938313034
+		Adjusted Mutual Information: 0.684139351917
+	kNN graph, k = 270, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6499614789729603
+	Adjusted Mutual Information: 0.665717655464
+		kNN graph, k = 290, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.5203953976860415
+		Adjusted Mutual Information: 0.593611068866
+	kNN graph, k = 310, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.5124403192489849
+	Adjusted Mutual Information: 0.585340113176
+		kNN graph, k = 330, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.5085162057731225
+		Adjusted Mutual Information: 0.575482115659
+	
+Again L_sym coupled with k-NN graph seams to be the best choice. The best score was:
+	kNN graph, k = 170, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6864653740529051
+	Adjusted Mutual Information: 0.695137400988
+	
+Using gauss similarity (sigma = 5), samples unnormalized:
+*********************************************
+	kNN graph, k = 300, mutual:True
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.013998596333746517
+	Adjusted Mutual Information: 0.0212303287946
+		kNN graph, k = 170, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.5200601358215425
+		Adjusted Mutual Information: 0.601399013711
+	fully connected graph
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.04309555578228642
+	Adjusted Mutual Information: 0.0801425752011
+		kNN graph, k = 300, mutual:True
+		normalized (rw) Laplacian
+		Adjusted Rand index: 0.0024867193472554974
+		Adjusted Mutual Information: 0.023665557853
+	kNN graph, k = 170, mutual:False
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.302742838117168
+	Adjusted Mutual Information: 0.441444654281
+		fully connected graph
+		normalized (rw) Laplacian
+		Adjusted Rand index: 0.012245790098785542
+		Adjusted Mutual Information: 0.0316475166788
+	kNN graph, k = 300, mutual:True
+	unnormalized Laplacian
+	Adjusted Rand index: 0.0012103912230808042
+	Adjusted Mutual Information: 0.0159791038352
+		kNN graph, k = 170, mutual:False
+		unnormalized Laplacian
+		Adjusted Rand index: 0.302742838117168
+		Adjusted Mutual Information: 0.441444654281
+	fully connected graph
+	unnormalized Laplacian
+	Adjusted Rand index: 0.012245790098785542
+	Adjusted Mutual Information: 0.03164751101
+	
+Using gauss similarity (sigma = 5), samples normalized:
+*******************************************
+	kNN graph, k = 300, mutual:True
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.34108484430547426
+	Adjusted Mutual Information: 0.374639173339
+		kNN graph, k = 170, mutual:False
+		normalized (sym) Laplacian
+		Adjusted Rand index: 0.7101032797260417
+		Adjusted Mutual Information: 0.715889362457
+	fully connected graph
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.2913261954732874
+	Adjusted Mutual Information: 0.38360057389
+		kNN graph, k = 300, mutual:True
+		normalized (rw) Laplacian
+		Adjusted Rand index: 0.028182129099711458
+		Adjusted Mutual Information: 0.0948400114876
+	kNN graph, k = 170, mutual:False
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.6722414076091326
+	Adjusted Mutual Information: 0.695432516431
+		fully connected graph
+		normalized (rw) Laplacian
+		Adjusted Rand index: 0.09600514018934714
+		Adjusted Mutual Information: 0.159106844597
+	kNN graph, k = 300, mutual:True
+	unnormalized Laplacian
+	Adjusted Rand index: 3.663210956529066e-05
+	Adjusted Mutual Information: 2.38802052937e-05
+		kNN graph, k = 170, mutual:False
+		unnormalized Laplacian
+		Adjusted Rand index: 0.6724132257053116
+		Adjusted Mutual Information: 0.692924036223
+	fully connected graph
+	unnormalized Laplacian
+	Adjusted Rand index: 0.09600514018934714
+	Adjusted Mutual Information: 0.159106845581
+
+Additional testing: Gauss simmilarity (sigma =5), samples normalized:
+**********************************************************
+kNN graph, k = 50, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6795890223736974
+	Adjusted Mutual Information: 0.712843491203
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.45935096403069736
+	Adjusted Mutual Information: 0.599883254544
+	unnormalized Laplacian
+	Adjusted Rand index: 0.45935096403069736
+	Adjusted Mutual Information: 0.599883255012
+kNN graph, k = 100, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7001311733620259
+	Adjusted Mutual Information: 0.700826338735
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.529868468941398
+	Adjusted Mutual Information: 0.617288226493
+	unnormalized Laplacian
+	Adjusted Rand index: 0.529868468941398
+	Adjusted Mutual Information: 0.617288228283
+kNN graph, k = 150, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7009699405429731
+	Adjusted Mutual Information: 0.715574256511
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.6185528563187459
+	Adjusted Mutual Information: 0.670611076177
+	unnormalized Laplacian
+	Adjusted Rand index: 0.6185528563187459
+	Adjusted Mutual Information: 0.670611076177
+kNN graph, k = 200, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7083445010454187
+	Adjusted Mutual Information: 0.710032199017
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.6714233507073835
+	Adjusted Mutual Information: 0.690329483704
+	unnormalized Laplacian
+	Adjusted Rand index: 0.6714233507073835
+	Adjusted Mutual Information: 0.69032948298
+kNN graph, k = 250, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.692724722330302
+	Adjusted Mutual Information: 0.689586368153
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.6796879307257003
+	Adjusted Mutual Information: 0.67438217669
+	unnormalized Laplacian
+	Adjusted Rand index: 0.6840152440028694
+	Adjusted Mutual Information: 0.678074262012
+kNN graph, k = 300, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6831501379485599
+	Adjusted Mutual Information: 0.682511672862
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.6484354608705868
+	Adjusted Mutual Information: 0.668093344361
+	unnormalized Laplacian
+	Adjusted Rand index: 0.6519154748131702
+	Adjusted Mutual Information: 0.670246605207
+kNN graph, k = 350, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.5938790372169194
+	Adjusted Mutual Information: 0.60919170445
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.5794126072886792
+	Adjusted Mutual Information: 0.605626069787
+	unnormalized Laplacian
+	Adjusted Rand index: 0.5794126072886792
+	Adjusted Mutual Information: 0.605626069787
+kNN graph, k = 400, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.4857766173399379
+	Adjusted Mutual Information: 0.529424133808
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.5013943249146103
+	Adjusted Mutual Information: 0.529769751298
+	unnormalized Laplacian
+	Adjusted Rand index: 0.4688486265174454
+	Adjusted Mutual Information: 0.512349522264
+kNN graph, k = 450, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.46068733323649164
+	Adjusted Mutual Information: 0.503241072105
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.4059039755185557
+	Adjusted Mutual Information: 0.432920571259
+	unnormalized Laplacian
+	Adjusted Rand index: 0.4075164783812058
+	Adjusted Mutual Information: 0.434341884381
+
+kNN graph, k = 50, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6795890223736974
+	Adjusted Mutual Information: 0.712843490867
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.45935096403069736
+	Adjusted Mutual Information: 0.599883254076
+	unnormalized Laplacian
+	Adjusted Rand index: 0.45935096403069736
+	Adjusted Mutual Information: 0.599883254076
+kNN graph, k = 75, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7211105190291858
+	Adjusted Mutual Information: 0.740642665036
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.5345365024745083
+	Adjusted Mutual Information: 0.621466187722
+	unnormalized Laplacian
+	Adjusted Rand index: 0.5392467314331072
+	Adjusted Mutual Information: 0.62456831551
+kNN graph, k = 100, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7001311733620259
+	Adjusted Mutual Information: 0.700826339085
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.529868468941398
+	Adjusted Mutual Information: 0.617288227388
+	unnormalized Laplacian
+	Adjusted Rand index: 0.529868468941398
+	Adjusted Mutual Information: 0.617288227835
+kNN graph, k = 125, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7161165867206821
+	Adjusted Mutual Information: 0.721345772425
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.5898926447429249
+	Adjusted Mutual Information: 0.659500692615
+	unnormalized Laplacian
+	Adjusted Rand index: 0.5853063916196808
+	Adjusted Mutual Information: 0.656695249958
+kNN graph, k = 150, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7009699405429731
+	Adjusted Mutual Information: 0.715574258839
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.6185528563187459
+	Adjusted Mutual Information: 0.670611075792
+	unnormalized Laplacian
+	Adjusted Rand index: 0.6185528563187459
+	Adjusted Mutual Information: 0.670611076177
+kNN graph, k = 175, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7255495660763566
+	Adjusted Mutual Information: 0.729907055121
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.6718984816776176
+	Adjusted Mutual Information: 0.697461816332
+	unnormalized Laplacian
+	Adjusted Rand index: 0.679759123532269
+	Adjusted Mutual Information: 0.703304056028
+kNN graph, k = 200, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7126077010516568
+	Adjusted Mutual Information: 0.714606864547
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.667594908072689
+	Adjusted Mutual Information: 0.686992744047
+	unnormalized Laplacian
+	Adjusted Rand index: 0.6714233507073835
+	Adjusted Mutual Information: 0.69032948298
+kNN graph, k = 225, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6936243282380427
+	Adjusted Mutual Information: 0.691091945239
+	normalized (rw) Laplacian
+	Adjusted Rand index: 0.6591965044257826
+	Adjusted Mutual Information: 0.672515668128
+	unnormalized Laplacian
+	Adjusted Rand index: 0.658982912578558
+	Adjusted Mutual Information: 0.674252607993
+	
+kNN graph, k = 50, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.6795890223736974
+Adjusted Mutual Information: 0.712843491203
+	kNN graph, k = 55, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6839149657052931
+	Adjusted Mutual Information: 0.712207727838
+kNN graph, k = 60, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.6741106468271356
+Adjusted Mutual Information: 0.706339882733
+	kNN graph, k = 65, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6848646062661414
+	Adjusted Mutual Information: 0.712508769007
+kNN graph, k = 70, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.704013269565544
+Adjusted Mutual Information: 0.724663723608
+	kNN graph, k = 75, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7171060098947374
+	Adjusted Mutual Information: 0.733818975919
+kNN graph, k = 80, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.7275082700417678
+Adjusted Mutual Information: 0.73651822171
+	kNN graph, k = 85, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7121729009622739
+	Adjusted Mutual Information: 0.720846735845
+kNN graph, k = 90, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.7016845609254742
+Adjusted Mutual Information: 0.707257197113
+	kNN graph, k = 95, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6942679994279696
+	Adjusted Mutual Information: 0.697332463734	
+
+kNN graph, k = 150, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.7009699405429731
+Adjusted Mutual Information: 0.715574257841
+	kNN graph, k = 155, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6942024944392755
+	Adjusted Mutual Information: 0.708762178904
+kNN graph, k = 160, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.6986497149507327
+Adjusted Mutual Information: 0.707698125451
+	kNN graph, k = 165, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7027918085087244
+	Adjusted Mutual Information: 0.710861584685
+kNN graph, k = 170, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.7101032797260417
+Adjusted Mutual Information: 0.715889362789
+	kNN graph, k = 175, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7255495660763566
+	Adjusted Mutual Information: 0.729907054174
+kNN graph, k = 180, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.7300795262608537
+Adjusted Mutual Information: 0.732915963568
+	kNN graph, k = 185, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7181538136336502
+	Adjusted Mutual Information: 0.726186681625
+kNN graph, k = 190, mutual:False
+normalized (sym) Laplacian
+Adjusted Rand index: 0.7081454595430988
+Adjusted Mutual Information: 0.714341596775
+	kNN graph, k = 195, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.6994143734278545
+	Adjusted Mutual Information: 0.699327880576
+
+***************************************************	
+The best score for "bigger_test_set_noncor" dataset:
+*normalized samples
+*gauss similarity (sigma = 5)
+	kNN graph, k = 180, mutual:False
+	normalized (sym) Laplacian
+	Adjusted Rand index: 0.7300795262608537
+	Adjusted Mutual Information: 0.732915963568
+***************************************************
+		

@@ -12,6 +12,7 @@ from sklearn.neighbors import NearestNeighbors
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import normalize
+from sklearn import metrics
 import matplotlib.pyplot as plt 
 
 #A class for testing the efficiency of spectral clustering (in text clustering) for different parameters.
@@ -39,7 +40,7 @@ class spectral():
     
     """Construct a kNN similarity graph. Make sure the metric is consistent with the choice of d."""    
     def kNN_graph(self, k, metric, mutual=False):
-        nn = NearestNeighbors(k, metric=metric).fit(self.X)
+        nn = NearestNeighbors(k, algorithm="brute", metric=metric).fit(self.X)
         UAM = nn.kneighbors_graph(self.X).toarray() #unweighted adjacency matrix
         m = UAM.shape[0]
         self.W = np.zeros((m, m)) #(weighted) adjecancy matrix
@@ -56,6 +57,7 @@ class spectral():
                     if UAM[i,j] == 1 and UAM[j,i] == 1:
                         self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
                         self.D[i,i] += 1
+        self.W = np.nan_to_num(self.W)
         self.graph = "kNN graph, k = " + str(k) + ", mutual:" + str(mutual)
 
     """Construct a fully connected graph"""    
@@ -67,6 +69,7 @@ class spectral():
             for j in range(m):
                 self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
                 self.D[i,i] += 1
+        self.W = np.nan_to_num(self.W)
         self.graph = "fully connected graph"
     
     """Plot a similarity graph. PCA to 2 dimensions"""
@@ -79,7 +82,7 @@ class spectral():
             plt.figure()
             for i in k:
                 indices = [j for j,x in enumerate(self.labels) if x == i]
-                plt.scatter(X[indices,0], X[indices,1], s=30, c= "0.6")
+                plt.scatter(X[indices,0], X[indices,1], s=30, c= "yellow")
             for i in range(self.W.shape[0]):
                 for j in range(self.W.shape[1]):
                     if self.W[i,j] != 0:
@@ -119,6 +122,7 @@ class spectral():
             D_sqrt = np.copy(self.D)
             m = self.D.shape[0]
             D_sqrt[np.diag_indices(m)] = np.diag(self.D)**(-1/2)
+            D_sqrt = np.nan_to_num(D_sqrt) #not sure if this is a good idea
             self.L = np.identity(m) - np.dot(np.dot(D_sqrt, self.W), D_sqrt) #compute the unnormalized Laplacian
 #            if self.graph == "fully connected graph":
             self.w, self.U = eigh(self.L, eigvals=(0,k-1)) #compute the eigenvalues and eigenvectors
@@ -158,8 +162,12 @@ class spectral():
             plt.scatter(X[indices,0], X[indices,1], s=30, c=colors[int(i)])
         plt.title("Correct clusters")
         plt.show()
-                        
-#    def score():        
+
+    """Measure the effectiveness of predictions usin different metrics"""                        
+    def evaluate(self):
+        print("Adjusted Rand index:", metrics.adjusted_rand_score(self.labels, self.pred))
+        print("Adjusted Mutual Information:", metrics.adjusted_mutual_info_score(self.labels, self.pred))
+                
          
         
         
