@@ -40,7 +40,7 @@ class spectral():
     
     """Construct a kNN similarity graph. Make sure the metric is consistent with the choice of d."""    
     def kNN_graph(self, k, metric, mutual=False):
-        nn = NearestNeighbors(k, algorithm="brute", metric=metric).fit(self.X)
+        nn = NearestNeighbors(k, algorithm="brute", metric=metric, n_jobs=-1).fit(self.X)
         UAM = nn.kneighbors_graph(self.X).toarray() #unweighted adjacency matrix
         m = UAM.shape[0]
         self.W = np.zeros((m, m)) #(weighted) adjecancy matrix
