@@ -11,8 +11,10 @@ import spectral
 import scipy.spatial.distance as dist
 
 #rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/small_test_set'
-#rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_noncor'
-rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_cor'
+#rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_noncor/train'
+rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_noncor/test'
+#rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_cor/train'
+#rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_cor/test'
 
 words = newsgroups20.get_words(rootdir)
 M, labels = newsgroups20.get_M(rootdir, words)

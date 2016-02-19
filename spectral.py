@@ -7,6 +7,8 @@ Created on Tue Feb  2 11:42:17 2016
 
 import numpy as np
 from scipy.linalg import eigh
+from scipy.spatial.distance import pdist
+from scipy.spatial.distance import squareform
 #from scipy.sparse.linalg import eigsh
 from sklearn.neighbors import NearestNeighbors
 from sklearn.cluster import KMeans
@@ -25,17 +27,24 @@ class spectral():
         self.d = d #a metric used in similarity function
         self.graph = False #a switch that tells if the similartiy graph has allready been constructed
         self.clustering = False #a switch that tells if clustering has allready been done
+        self.full_calculated = False #a switch that tells if full graph has been calculated
     
     """Construct an epsilon similarity graph"""        
     def eps_graph(self, eps):
         m = self.X.shape[0]
         self.W = np.zeros((m, m)) #(weighted) adjecancy matrix
         self.D = np.zeros((m, m)) #degree matrix
-        for i in range(m): #measure the similarty of samples
-            for j in range(m):
-                if (i != j and self.s(self.X[i], self.X[j], self.d) >= eps): #if similartiy is bigger than some eps
-                    self.W[i,j] = 1 #put 1 in adjacency matrix
-                    self.D[i,i] += 1
+        if self.full_calculated:
+            indices = np.where(self.full_W >= eps)
+            self.W[indices] = self.full_W[indices]
+            self.D[np.diag_indices(m)] = np.sum(self.W != 0, 1)
+        else:
+            for i in range(m): #measure the similarty of samples
+                for j in range(m):
+                    sim = self.s(self.X[i], self.X[j], self.d)
+                    if (i != j and sim >= eps): #if similartiy is bigger than some eps
+                        self.W[i,j] = sim #put it in adjacency matrix
+                        self.D[i,i] += 1
         self.graph = "Espilon-graph, epsilon = " + str(eps) #update the switch
     
     """Construct a kNN similarity graph. Make sure the metric is consistent with the choice of d."""    
@@ -46,31 +55,50 @@ class spectral():
         self.W = np.zeros((m, m)) #(weighted) adjecancy matrix
         self.D = np.zeros((m, m)) #degree matrix
         if mutual == False:
-            for i in range(m):
-                for j in range(m):
-                    if UAM[i,j] == 1:
-                        self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
-                        self.D[i,i] += 1
+            if self.full_calculated:
+                indices = np.where(UAM == 1)
+                self.W[indices] = self.full_W[indices]
+                self.D[np.diag_indices(m)] = np.sum(self.W != 0, 1)
+            else:
+                for i in range(m):
+                    for j in range(m):
+                        if UAM[i,j] == 1:
+                            self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
+                            self.D[i,i] += 1
         else:
-            for i in range(m):
-                for j in range(m):
-                    if UAM[i,j] == 1 and UAM[j,i] == 1:
-                        self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
-                        self.D[i,i] += 1
+            if self.full_calculated:
+                indices = np.where(np.logical_and(UAM == 1, UAM.T == 1).astype(int) == 1)
+                self.W[indices] = self.full_W[indices]
+                self.D[np.diag_indices(m)] = np.sum(self.W != 0, 1)
+            else:
+                for i in range(m):
+                    for j in range(m):
+                        if UAM[i,j] == 1 and UAM[j,i] == 1:
+                            self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
+                            self.D[i,i] += 1
         self.W = np.nan_to_num(self.W)
         self.graph = "kNN graph, k = " + str(k) + ", mutual:" + str(mutual)
 
     """Construct a fully connected graph"""    
-    def full_graph(self):
+    def full_graph(self, metric):
+        sigma = 1
         m = self.X.shape[0]
         self.W = np.zeros((m, m)) #(weighted) adjecancy matrix
         self.D = np.zeros((m, m)) #degree matrix
-        for i in range(m):
-            for j in range(m):
-                self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
-                self.D[i,i] += 1
+        dist_M = squareform(pdist(self.X, metric))
+        if (metric == "euclidean"):
+            self.W = np.exp(-dist_M/(2*sigma**2))
+        elif (metric == "cosine"):
+            self.W = -(dist_M - 1)
+        self.D[np.diag_indices(m)] = m
+#        for i in range(m):
+#            for j in range(m):
+#                self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
+#                self.D[i,i] += 1
         self.W = np.nan_to_num(self.W)
+        self.full_W = np.copy(self.W)
         self.graph = "fully connected graph"
+        self.full_calculated = True
     
     """Plot a similarity graph. PCA to 2 dimensions"""
     def show_sim_g(self):
@@ -163,10 +191,11 @@ class spectral():
         plt.title("Correct clusters")
         plt.show()
 
-    """Measure the effectiveness of predictions usin different metrics"""                        
+    """Measure the effectiveness of predictions using different metrics"""                        
     def evaluate(self):
         print("Adjusted Rand index:", metrics.adjusted_rand_score(self.labels, self.pred))
         print("Adjusted Mutual Information:", metrics.adjusted_mutual_info_score(self.labels, self.pred))
+        print("Normalized Mutual Information:", metrics.normalized_mutual_info_score(self.labels, self.pred))
                 
          
         

@@ -317,7 +317,7 @@ kNN graph, k = 175, mutual:False
 		Adjusted Mutual Information: 0.614120641785
 
 ***************************************************	
-The best score for "bigger_test_set_noncor" dataset:
+The best score for "bigger_test_set_cor" dataset:
 *normalized samples
 *gauss similarity (sigma = 10)
 	kNN graph, k = 175, mutual:False
@@ -761,4 +761,438 @@ The best score for "bigger_test_set_noncor" dataset:
 	Adjusted Rand index: 0.7300795262608537
 	Adjusted Mutual Information: 0.732915963568
 ***************************************************
-		
+
+***********		
+16.2.2016 *
+*******************************************************************************************************************************
+In the previous week I found some really nice dataset at: http://web.ist.utl.pt/~acardoso/datasets/
+These are the preproscesed datasets from different sources preprocesed by Ana Cardoso-Cachopo as part of her 2007
+thesis "Improving Methods for Single-label Text Categorization".
+
+I tested the spectral clustering algorithms on the next datasets:
+-r8
+-r52
+-webkb
+
+I used the samples that were used by Ana as test datasets.
+
+RESULTS:
+
+r8 dataset:
+***********
+
+GAUSSIAN SIMILARITY
+
+fully connected graph
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.25691489742559026
+Adjusted Mutual Information: 0.39900726907
+Normalized Mutual Information: 0.447110849176
+normalized (rw) Laplacian
+Adjusted Rand index: 0.09957476056214883
+Adjusted Mutual Information: 0.332814939998
+Normalized Mutual Information: 0.340186752668
+unnormalized Laplacian
+Adjusted Rand index: 0.09920751659731139
+Adjusted Mutual Information: 0.332815815026
+Normalized Mutual Information: 0.340103786258
+ 
+Espilon-graph, epsilon = 0.0
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.25691489742559026
+Adjusted Mutual Information: 0.399007269415
+Normalized Mutual Information: 0.447110849176
+normalized (rw) Laplacian
+Adjusted Rand index: 0.09957476056214883
+Adjusted Mutual Information: 0.332814939527
+Normalized Mutual Information: 0.340186752668
+unnormalized Laplacian
+Adjusted Rand index: 0.09920751659731139
+Adjusted Mutual Information: 0.332815815968
+Normalized Mutual Information: 0.340103786258 
+
+kNN graph, k = 569, mutual:True
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.34304368556411113
+Adjusted Mutual Information: 0.440950230208
+Normalized Mutual Information: 0.547376457113
+normalized (rw) Laplacian
+Adjusted Rand index: 0.393834494026019
+Adjusted Mutual Information: 0.476832621221
+Normalized Mutual Information: 0.545510100798
+unnormalized Laplacian
+Adjusted Rand index: -0.0027876657055326518
+Adjusted Mutual Information: -0.00151066881698
+Normalized Mutual Information: 0.0117307795365
+
+kNN graph, k = 284, mutual:False
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.2598746558244234
+Adjusted Mutual Information: 0.393417980223
+Normalized Mutual Information: 0.491849384202
+normalized (rw) Laplacian
+Adjusted Rand index: 0.21329364227780281
+Adjusted Mutual Information: 0.379571097393
+Normalized Mutual Information: 0.459673360973
+unnormalized Laplacian
+Adjusted Rand index: 0.21349110536790236
+Adjusted Mutual Information: 0.379090073774
+Normalized Mutual Information: 0.459083173968
+ 
+COSINE SIMILARITY
+
+fully connected graph
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.25612001879281965
+Adjusted Mutual Information: 0.381631081988
+Normalized Mutual Information: 0.434203751637
+normalized (rw) Laplacian
+Adjusted Rand index: 0.13739814051846408
+Adjusted Mutual Information: 0.354250527496
+Normalized Mutual Information: 0.366938020693
+unnormalized Laplacian
+Adjusted Rand index: 0.1370813903907213
+Adjusted Mutual Information: 0.35462989261
+Normalized Mutual Information: 0.367552677108
+
+Espilon-graph, epsilon = 0.0
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.3398106004545887
+Adjusted Mutual Information: 0.429411521215
+Normalized Mutual Information: 0.500048944817
+normalized (rw) Laplacian
+Adjusted Rand index: -0.010616641277866103
+Adjusted Mutual Information: 0.0942833641902
+Normalized Mutual Information: 0.175933733591
+unnormalized Laplacian
+Adjusted Rand index: 0.004661762426990892
+Adjusted Mutual Information: 0.00334465662286
+Normalized Mutual Information: 0.0452198176939
+
+kNN graph, k = 569, mutual:True
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.1964999420263028
+Adjusted Mutual Information: 0.313310331186
+Normalized Mutual Information: 0.3755724599
+normalized (rw) Laplacian
+Adjusted Rand index: -0.0048104420569796335
+Adjusted Mutual Information: 0.0413830596351
+Normalized Mutual Information: 0.0993583255458
+unnormalized Laplacian
+Adjusted Rand index: -0.0027876657055326518
+Adjusted Mutual Information: -0.00151066881698
+Normalized Mutual Information: 0.0117307795365
+
+kNN graph, k = 284, mutual:False
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.15936755845229858
+Adjusted Mutual Information: 0.322568054649
+Normalized Mutual Information: 0.371587370927
+normalized (rw) Laplacian
+Adjusted Rand index: 0.004946173591933196
+Adjusted Mutual Information: 0.285046109662
+Normalized Mutual Information: 0.296048713465
+unnormalized Laplacian
+Adjusted Rand index: 0.004661762426990892
+Adjusted Mutual Information: 0.00334465662286
+Normalized Mutual Information: 0.0452198176939
+
+r52 dataset
+***********
+
+GAUSSIAN SIMILARITY
+
+fully connected graph
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.08801469163587332
+Adjusted Mutual Information: 0.33164567837
+Normalized Mutual Information: 0.525385356421
+normalized (rw) Laplacian
+Adjusted Rand index: 0.11673032293470714
+Adjusted Mutual Information: 0.334516749744
+Normalized Mutual Information: 0.492428287211
+unnormalized Laplacian
+Adjusted Rand index: 0.10896339984983239
+Adjusted Mutual Information: 0.329576416393
+Normalized Mutual Information: 0.491258610881
+
+Espilon-graph, epsilon = 0.0
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.09834394680067095
+Adjusted Mutual Information: 0.33775185108
+Normalized Mutual Information: 0.532227148365
+normalized (rw) Laplacian
+Adjusted Rand index: 0.11891189677091446
+Adjusted Mutual Information: 0.333574277857
+Normalized Mutual Information: 0.491531172102
+unnormalized Laplacian
+Adjusted Rand index: 0.1444670698639577
+Adjusted Mutual Information: 0.338518137157
+Normalized Mutual Information: 0.493758850809
+
+kNN graph, k = 654, mutual:True
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.06826679481137934
+Adjusted Mutual Information: 0.29399197301
+Normalized Mutual Information: 0.483093018924
+normalized (rw) Laplacian
+Adjusted Rand index: 0.14206117120950348
+Adjusted Mutual Information: 0.297808802975
+Normalized Mutual Information: 0.430648254957
+unnormalized Laplacian
+Adjusted Rand index: -0.0032969734424247036
+Adjusted Mutual Information: -0.001259743599
+Normalized Mutual Information: 0.0643567751738
+
+kNN graph, k = 327, mutual:False
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.06795470211495476
+Adjusted Mutual Information: 0.287169994381
+Normalized Mutual Information: 0.474288259567
+normalized (rw) Laplacian
+Adjusted Rand index: 0.07289809166614114
+Adjusted Mutual Information: 0.295010320634
+Normalized Mutual Information: 0.48139911549
+unnormalized Laplacian
+Adjusted Rand index: 0.07647993832665723
+Adjusted Mutual Information: 0.292700401362
+Normalized Mutual Information: 0.477747077223
+
+COSINE SIMILARITY
+
+fully connected graph
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.08860117745406443
+Adjusted Mutual Information: 0.327682563127
+Normalized Mutual Information: 0.520533808884
+normalized (rw) Laplacian
+Adjusted Rand index: 0.14435301550183677
+Adjusted Mutual Information: 0.346052497908
+Normalized Mutual Information: 0.514136368996
+unnormalized Laplacian
+Adjusted Rand index: 0.1126237819064928
+Adjusted Mutual Information: 0.337496153283
+Normalized Mutual Information: 0.50527122608
+
+Espilon-graph, epsilon = 0.0
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.09090522443230623
+Adjusted Mutual Information: 0.322415364107
+Normalized Mutual Information: 0.512706072747
+normalized (rw) Laplacian
+Adjusted Rand index: -0.002502313374962351
+Adjusted Mutual Information: 0.24428855172
+Normalized Mutual Information: 0.299115038982
+unnormalized Laplacian
+Adjusted Rand index: 0.015798343989515327
+Adjusted Mutual Information: 0.00897549509288
+Normalized Mutual Information: 0.098776333967
+
+kNN graph, k = 654, mutual:True
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.10149833017186326
+Adjusted Mutual Information: 0.346187164635
+Normalized Mutual Information: 0.541163944671
+normalized (rw) Laplacian
+Adjusted Rand index: 0.26037613434105367
+Adjusted Mutual Information: 0.410416046436
+Normalized Mutual Information: 0.485426104622
+unnormalized Laplacian
+Adjusted Rand index: -0.0029867258927027606
+Adjusted Mutual Information: -0.00117678659732
+Normalized Mutual Information: 0.0646357470163
+
+kNN graph, k = 327, mutual:False
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.1110424133264048
+Adjusted Mutual Information: 0.332273231097
+Normalized Mutual Information: 0.52349799375
+normalized (rw) Laplacian
+Adjusted Rand index: 0.12900276858875367
+Adjusted Mutual Information: 0.327320946
+Normalized Mutual Information: 0.48085235996
+unnormalized Laplacian
+Adjusted Rand index: 0.10728146241288566
+Adjusted Mutual Information: 0.333635632135
+Normalized Mutual Information: 0.458779337254
+
+r52 dataset
+***********
+
+GAUSSIAN SIMILARITY
+
+fully connected graph
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.2948683284635312
+Adjusted Mutual Information: 0.294109111214
+Normalized Mutual Information: 0.300580638112
+normalized (rw) Laplacian
+Adjusted Rand index: 0.26432127936334515
+Adjusted Mutual Information: 0.258385124758
+Normalized Mutual Information: 0.293669968776
+unnormalized Laplacian
+Adjusted Rand index: 0.26669525822711787
+Adjusted Mutual Information: 0.260854950852
+Normalized Mutual Information: 0.29620454033
+
+Espilon-graph, epsilon = 0.0
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.2946525802125493
+Adjusted Mutual Information: 0.293948909681
+Normalized Mutual Information: 0.300421590106
+normalized (rw) Laplacian
+Adjusted Rand index: 0.26432127936334515
+Adjusted Mutual Information: 0.258385124229
+Normalized Mutual Information: 0.293669968776
+unnormalized Laplacian
+Adjusted Rand index: 0.26560453175271254
+Adjusted Mutual Information: 0.259665784502
+Normalized Mutual Information: 0.294977084276
+
+kNN graph, k = 385, mutual:True
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.00109988785048
+Normalized Mutual Information: 0.00564104756991
+normalized (rw) Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.0010998883859
+Normalized Mutual Information: 0.00564104756991
+unnormalized Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.00109988785048
+Normalized Mutual Information: 0.00564104756991
+
+kNN graph, k = 192, mutual:False
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.32985115499867196
+Adjusted Mutual Information: 0.303662680968
+Normalized Mutual Information: 0.311571401647
+normalized (rw) Laplacian
+Adjusted Rand index: 0.3003572249992833
+Adjusted Mutual Information: 0.284352514149
+Normalized Mutual Information: 0.286528303613
+unnormalized Laplacian
+Adjusted Rand index: 0.30188951607097786
+Adjusted Mutual Information: 0.285231774112
+Normalized Mutual Information: 0.287350000771
+
+COSINE SIMILARITY
+
+fully connected graph
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.32120134418320784
+Adjusted Mutual Information: 0.320375118378
+Normalized Mutual Information: 0.328173359323
+normalized (rw) Laplacian
+Adjusted Rand index: 0.2870154841036252
+Adjusted Mutual Information: 0.278937211888
+Normalized Mutual Information: 0.315244037293
+unnormalized Laplacian
+Adjusted Rand index: 0.2870154841036252
+Adjusted Mutual Information: 0.278937212145
+Normalized Mutual Information: 0.315244037293
+
+Espilon-graph, epsilon = 0.0
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.00109988785048
+Normalized Mutual Information: 0.00564104756991
+normalized (rw) Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.0010998883859
+Normalized Mutual Information: 0.00564104756991
+unnormalized Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.00109988785048
+Normalized Mutual Information: 0.00564104756991
+
+kNN graph, k = 385, mutual:True
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.00109988785048
+Normalized Mutual Information: 0.00564104756991
+normalized (rw) Laplacian
+Adjusted Rand index: -0.001636019840515025
+Adjusted Mutual Information: -0.000258981964826
+Normalized Mutual Information: 0.015730833616
+unnormalized Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.00109988785048
+Normalized Mutual Information: 0.00564104756991
+
+kNN graph, k = 192, mutual:False
+
+normalized (sym) Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.00109988785048
+Normalized Mutual Information: 0.00564104756991
+normalized (rw) Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.0010998883859
+Normalized Mutual Information: 0.00564104756991
+unnormalized Laplacian
+Adjusted Rand index: 0.00013172343503959553
+Adjusted Mutual Information: -0.00109988820743
+Normalized Mutual Information: 0.00564104756991	
+
+For newsgroups bigger_test_set_cor:
+
+*normalized samples
+*gauss similarity (sigma = 1)
+	kNN graph, k = 175, mutual:False
+	normalized (sym) Laplacian
+
+TRAIN set:
+
+Adjusted Rand index: 0.5940360300187144
+Adjusted Mutual Information: 0.637958255174
+Normalized Mutual Information: 0.64209687733
+
+TEST set:
+
+Adjusted Rand index: 0.5494364500705412
+Adjusted Mutual Information: 0.589265205696
+Normalized Mutual Information: 0.593679515246
+
+For newsgroups bigger_test_set_noncor:
+
+*normalized samples
+*gauss similarity (sigma = 1)
+	kNN graph, k = 180, mutual:False
+	normalized (sym) Laplacian
+
+TRAIN set:
+
+Adjusted Rand index: 0.7287947159116285
+Adjusted Mutual Information: 0.732860063543
+Normalized Mutual Information: 0.737114219146
+
+TEST set:
+
+Adjusted Rand index: 0.6763329747104472
+Adjusted Mutual Information: 0.667188862651
+Normalized Mutual Information: 0.670625524891
