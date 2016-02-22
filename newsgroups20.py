@@ -37,9 +37,9 @@ def get_words(root_dir, n=False):
     d2 = cnt.most_common() #take all words
     for key, value in d2:
         words.append(key)
-    if n:
-        np.savetxt(str(n) + "_words.txt", words, fmt="%s")
-    np.savetxt("words.txt", words, fmt="%s")
+#    if n:
+#        np.savetxt(str(n) + "_words.txt", words, fmt="%s")
+#    np.savetxt("words.txt", words, fmt="%s")
     return words
 
 #Iterate over texts in directory and present each text with a n-dimensional vector according to provided list words
@@ -73,9 +73,9 @@ def get_M(root_dir, words):
         label += 1
     M = np.array(M)
     labels = np.array(labels)
-    np.savetxt("filenames.txt", filenames, fmt="%s")
-    np.savetxt("M_" + str(n) + ".txt", M, fmt="%s")
-    np.savetxt("M_" + str(n) + "_labels.txt", labels , fmt="%s")
+#    np.savetxt("filenames.txt", filenames, fmt="%s")
+#    np.savetxt("M_" + str(n) + ".txt", M, fmt="%s")
+#    np.savetxt("M_" + str(n) + "_labels.txt", labels , fmt="%s")
     return (M, labels)
 
 #TODO: take a close look at this!!!
@@ -97,7 +97,7 @@ def get_tf_idf_M(M, tf = ["bin", "raw", "log", "dnorm"], idf = ["c", "smooth", "
     if norm_samps:
         normalizer = Normalizer()
         tf_idf_M = normalizer.fit_transform(tf_idf_M)
-    np.savetxt("tf_idf_M_" + str(N) + ".txt", tf_idf_M , fmt="%s")
+#    np.savetxt("tf_idf_M_" + str(N) + ".txt", tf_idf_M , fmt="%s")
     return tf_idf_M
         
     

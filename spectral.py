@@ -37,14 +37,14 @@ class spectral():
         if self.full_calculated:
             indices = np.where(self.full_W >= eps)
             self.W[indices] = self.full_W[indices]
-            self.D[np.diag_indices(m)] = np.sum(self.W != 0, 1)
+            self.D[np.diag_indices(m)] = np.sum(self.W, 1)
         else:
             for i in range(m): #measure the similarty of samples
                 for j in range(m):
                     sim = self.s(self.X[i], self.X[j], self.d)
                     if (i != j and sim >= eps): #if similartiy is bigger than some eps
                         self.W[i,j] = sim #put it in adjacency matrix
-                        self.D[i,i] += 1
+                        self.D[i,i] += sim #add it to degree of vertex i
         self.graph = "Espilon-graph, epsilon = " + str(eps) #update the switch
     
     """Construct a kNN similarity graph. Make sure the metric is consistent with the choice of d."""    
@@ -58,13 +58,14 @@ class spectral():
             if self.full_calculated:
                 indices = np.where(UAM == 1)
                 self.W[indices] = self.full_W[indices]
-                self.D[np.diag_indices(m)] = np.sum(self.W != 0, 1)
+                self.D[np.diag_indices(m)] = np.sum(self.W, 1)
             else:
                 for i in range(m):
                     for j in range(m):
                         if UAM[i,j] == 1:
-                            self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
-                            self.D[i,i] += 1
+                            sim = self.s(self.X[i], self.X[j], self.d)
+                            self.W[i,j] = sim
+                            self.D[i,i] += sim
         else:
             if self.full_calculated:
                 indices = np.where(np.logical_and(UAM == 1, UAM.T == 1).astype(int) == 1)
@@ -74,8 +75,9 @@ class spectral():
                 for i in range(m):
                     for j in range(m):
                         if UAM[i,j] == 1 and UAM[j,i] == 1:
-                            self.W[i,j] = self.s(self.X[i], self.X[j], self.d)
-                            self.D[i,i] += 1
+                            sim = self.s(self.X[i], self.X[j], self.d)
+                            self.W[i,j] = sim
+                            self.D[i,i] += sim
         self.W = np.nan_to_num(self.W)
         self.graph = "kNN graph, k = " + str(k) + ", mutual:" + str(mutual)
 
@@ -90,7 +92,7 @@ class spectral():
             self.W = np.exp(-dist_M/(2*sigma**2))
         elif (metric == "cosine"):
             self.W = -(dist_M - 1)
-        self.D[np.diag_indices(m)] = m
+        self.D[np.diag_indices(m)] = np.sum(self.W, 1)
 #        for i in range(m):
 #            for j in range(m):
 #                self.W[i,j] = self.s(self.X[i], self.X[j], self.d)

@@ -1196,3 +1196,42 @@ TEST set:
 Adjusted Rand index: 0.6763329747104472
 Adjusted Mutual Information: 0.667188862651
 Normalized Mutual Information: 0.670625524891
+
+21.02.2016
+**********
+
+Fixed the problem. Degree matrix was defined wrong.
+
+Testing again...
+
+Extended the newsgroups dataset. Added two topics. One 30 samples. Other 200. (sci.med and sci.space)
+bigger_test_set_cor
+
+TRAIN:
+
+*normalized samples
+*gauss similarity (sigma = 1)
+kNN graph, k = 62, mutual:True
+normalized (sym) Laplacian
+Adjusted Rand index: 0.6413497994264332
+Adjusted Mutual Information: 0.658530277559
+Normalized Mutual Information: 0.672284854059
+
+TEST:
+
+*normalized samples
+*gauss similarity (sigma = 1)
+kNN graph, k = 62, mutual:True
+normalized (sym) Laplacian
+Adjusted Rand index: 0.6380880006420578
+Adjusted Mutual Information: 0.65629875881
+Normalized Mutual Information: 0.670931563041
+
+
+
+
+
+
+
+
+
