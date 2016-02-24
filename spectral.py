@@ -28,9 +28,11 @@ class spectral():
         self.graph = False #a switch that tells if the similartiy graph has allready been constructed
         self.clustering = False #a switch that tells if clustering has allready been done
         self.full_calculated = False #a switch that tells if full graph has been calculated
+#        self.latex = []
     
     """Construct an epsilon similarity graph"""        
     def eps_graph(self, eps):
+#        self.latex = []
         m = self.X.shape[0]
         self.W = np.zeros((m, m)) #(weighted) adjecancy matrix
         self.D = np.zeros((m, m)) #degree matrix
@@ -49,6 +51,7 @@ class spectral():
     
     """Construct a kNN similarity graph. Make sure the metric is consistent with the choice of d."""    
     def kNN_graph(self, k, metric, mutual=False):
+#        self.latex = []
         nn = NearestNeighbors(k, algorithm="brute", metric=metric, n_jobs=-1).fit(self.X)
         UAM = nn.kneighbors_graph(self.X).toarray() #unweighted adjacency matrix
         m = UAM.shape[0]
@@ -83,6 +86,7 @@ class spectral():
 
     """Construct a fully connected graph"""    
     def full_graph(self, metric):
+#        self.latex = []
         sigma = 1
         m = self.X.shape[0]
         self.W = np.zeros((m, m)) #(weighted) adjecancy matrix
@@ -195,10 +199,20 @@ class spectral():
 
     """Measure the effectiveness of predictions using different metrics"""                        
     def evaluate(self):
-        print("Adjusted Rand index:", metrics.adjusted_rand_score(self.labels, self.pred))
-        print("Adjusted Mutual Information:", metrics.adjusted_mutual_info_score(self.labels, self.pred))
-        print("Normalized Mutual Information:", metrics.normalized_mutual_info_score(self.labels, self.pred))
-                
-         
-        
-        
+        ARI = round(metrics.adjusted_rand_score(self.labels, self.pred), 4)
+        AMI = round(metrics.adjusted_mutual_info_score(self.labels, self.pred), 4)
+        NMI = round(metrics.normalized_mutual_info_score(self.labels, self.pred), 4)
+        print("Adjusted Rand index:", "%.4f" % ARI)
+        print("Adjusted Mutual Information:", "%.4f" % AMI)
+        print("Normalized Mutual Information:", "%.4f" % NMI)
+#        print("ARI: ", "%.4f" % round(metrics.adjusted_rand_score(self.labels, self.pred), 4), "\\\",
+#              "AMI: ", "%.4f" % round(metrics.adjusted_mutual_info_score(self.labels, self.pred), 4), "\\\",
+#              "NMI: ", "%.4f" % round(metrics.normalized_mutual_info_score(self.labels, self.pred), 4))
+#        self.latex.append([ARI, AMI, NMI])
+    
+#    def print_for_latex(self):
+#        self.latex = np.array(self.latex).T
+#        print("& ARI: ", "%.4f" % self.latex[0,0], "& ARI: ", "%.4f" % self.latex[0,1], "& ARI: ", "%.4f" % self.latex[0,2], "\\".replace("\\", "\\\\"))
+#        print("& AMI: ", "%.4f" % self.latex[1,0], "& AMI: ", "%.4f" % self.latex[1,1], "& AMI: ", "%.4f" % self.latex[1,2], "\\".replace("\\", "\\\\"))
+#        print("& NMI: ", "%.4f" % self.latex[2,0], "& NMI: ", "%.4f" % self.latex[2,1], "& NMI: ", "%.4f" % self.latex[2,2], "\\".replace("\\", "\\\\"), "\hline")
+#        

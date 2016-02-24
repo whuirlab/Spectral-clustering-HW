@@ -11,8 +11,8 @@ import spectral
 import scipy.spatial.distance as dist
 from scipy.sparse.csgraph import minimum_spanning_tree as mst
 
-rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_cor/train'
-#rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_cor/test'
+#rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_cor/train'
+rootdir = 'D:/Documents/Faks/AD2I/Unsupervised_learning/Project_SC/datasets/20newsgroups/bigger_test_set_cor/test'
 
 words = newsgroups20.get_words(rootdir)
 M, labels = newsgroups20.get_M(rootdir, words)
@@ -86,13 +86,13 @@ def cos_s(x1, x2, d):
 #    print(k, "mutual NN graph.")
 #    c.evaluate()
     
-#for j in np.arange(100, 300, 20):
-#    c.kNN_graph(j, "euclidean", False)
+#for j in np.arange(10, 100, 10):
+#    c.kNN_graph(j, "euclidean", True)
 #    c.norm_sym_sc(k)
 #    print(c.graph)
 #    print(c.clustering)
 #    c.evaluate()
-#    c.kNN_graph(j, "cosine", True)
+#    c.kNN_graph(j, "euclidean", False)
 #    c.norm_sym_sc(k)
 #    print(c.graph)
 #    print(c.clustering)
